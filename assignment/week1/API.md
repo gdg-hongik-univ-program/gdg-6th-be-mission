@@ -69,7 +69,7 @@ Response:
 }
 ```
 
-4. 재고 추가
+##4. 재고 추가
 
 Method: PATCH
 
@@ -92,7 +92,7 @@ Response:
 }
 ```
 
-5. 상품 삭제
+##5. 상품 삭제
 
 Method: DELTE
 
