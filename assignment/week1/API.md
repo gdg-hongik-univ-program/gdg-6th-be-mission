@@ -10,7 +10,7 @@ Response:
 
 ```json
 {
- "id": 1,
+ "id": 2,
  "name": "버즈",
  "price": 129000,
  "stock": 8
@@ -53,7 +53,7 @@ Request:
 ```json
 {
  "name": "에어팟",
- "price": "249000,
+ "price": 249000,
  "stock": 5
 }
 ```
