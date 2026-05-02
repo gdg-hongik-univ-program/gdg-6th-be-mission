@@ -28,7 +28,7 @@ Request:
  }
 ]
 ```
-Response
+Response:
 구매 완료 / 총 금액: 627000
 
 3. 상품 등록
