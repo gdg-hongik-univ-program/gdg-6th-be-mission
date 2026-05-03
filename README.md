@@ -22,6 +22,7 @@ ProductUserController
 ├─ 상품 조회
 ├─ 전체 상품 조회
 └─ 상품 구매
+```
 
 API 목록
 
