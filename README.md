@@ -47,6 +47,6 @@ ProductUserController
 
 ## 배운 점
 
-- HTTP Method 역할 차이
-- PathVariable / RequestParam 사용
-- Controller 분리 구조
+- HTTP Method의 역할 차이
+- PathVariable과 Query Parameter 사용 방식
+- REST API 구조에 맞게 Controller와 URL 분리
