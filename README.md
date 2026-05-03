@@ -24,7 +24,7 @@ ProductUserController
 └─ 상품 구매
 ```
 
-API 목록
+## API 목록
 
 ## Admin
 
