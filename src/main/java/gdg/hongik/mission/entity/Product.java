@@ -14,7 +14,7 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String productId;  // 상품Id
+    private Long productId;  // 상품Id (@GeneratedValue를 사용하기 위해
     private String productName;   // 상품 이름
     private int productPrice;    // 상품 하나당 가격
     private int remainQuantity;   // 현재 상품의 개수

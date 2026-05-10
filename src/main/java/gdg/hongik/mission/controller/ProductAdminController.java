@@ -25,7 +25,6 @@ public class ProductAdminController {
         }
 
         Product product = new Product();
-        product.setProductId("num" + ProductStore.sequence++);
         product.setProductName(productName);
         product.setProductPrice((int) request.get("productPrice"));
         product.setRemainQuantity((int) request.get("remainQuantity"));
@@ -38,7 +37,7 @@ public class ProductAdminController {
     // 2. 재고 추가
     @PatchMapping("/products/{productId}")
     public Map<String, Object> addStock(
-            @PathVariable String productId,
+            @PathVariable Long productId,
             @RequestBody Map<String, Object> request
     ) {
 
@@ -70,7 +69,7 @@ public class ProductAdminController {
     @DeleteMapping("/products")
     public Map<String, Object> deleteProducts(@RequestBody Map<String, Object> request) {
 
-        List<String> productIds = (List<String>) request.get("productIds");
+        List<Long> productIds = (List<Long>) request.get("productIds");
 
         for (int i = 0; i < ProductStore.products.size(); i++) {
             Product p = ProductStore.products.get(i);

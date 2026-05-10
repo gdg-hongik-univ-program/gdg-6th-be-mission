@@ -10,7 +10,7 @@ public class ProductUserController {
 
     // 1. 상품 조회
     @GetMapping("/products/{productId}")
-    public Product getProduct(@PathVariable String productId) {
+    public Product getProduct(@PathVariable Long productId) {
 
         Product product = null;
 
@@ -42,7 +42,7 @@ public class ProductUserController {
 
             Map<String, Object> item = orderProducts.get(i);
 
-            String productId = (String) item.get("productId");
+            Long productId = Long.valueOf(item.get("productId").toString());
             int quantity = (int) item.get("quantity");
 
             Product product = null;
