@@ -50,3 +50,52 @@ ProductUserController
 - HTTP Method의 역할 차이
 - PathVariable과 Query Parameter 사용 방식
 - REST API 구조에 맞게 Controller와 URL 분리
+
+# 쇼핑몰 API - 2주차
+JPA와 H2 Database를 활용하여 기존 쇼핑몰 API를 개선하였다.  
+Controller / Service / Repository 계층 구조를 분리하고 Entity 기반으로 데이터를 관리하도록 구현하였다.
+
+---
+
+## 사용 기술
+- Spring Boot
+- Spring Data JPA
+- H2 Database
+- Lombok
+- Gradle
+
+---
+
+## 주요 변경 사항
+
+### Entity 적용
+- Product 클래스를 Entity로 변경
+- @Entity, @Id, @GeneratedValue 적용
+
+### Repository 적용
+- JpaRepository 기반 Repository 구현
+- CRUD 기능 사용
+
+### 계층 분리
+- Controller : 요청 처리
+- Service : 비즈니스 로직 처리
+- Repository : DB 접근 처리
+
+---
+
+## 구현 기능
+
+### Admin API
+- 상품 등록
+- 재고 추가
+- 여러 상품 삭제
+
+### User API
+- 상품 조회
+- 전체 상품 조회
+- 상품 구매
+
+---
+
+## API 테스트
+test.http 파일을 사용하여 API를 테스트하였다.
