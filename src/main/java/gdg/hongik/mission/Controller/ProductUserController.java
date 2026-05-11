@@ -1,14 +1,13 @@
 package gdg.hongik.mission.Controller;
 
+import gdg.hongik.mission.DTO.ProductBuyRequest;
+import gdg.hongik.mission.DTO.ProductBuyResponse;
 import gdg.hongik.mission.Entity.Product;
 import gdg.hongik.mission.Service.ProductUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class ProductUserController {
@@ -31,10 +30,10 @@ public class ProductUserController {
 
     //상품 구매
     @PostMapping("/orders")
-    public ResponseEntity<Void> buyProducts(@RequestBody Map<String, List<Map<String, Object>>> request) {
+    public ResponseEntity<ProductBuyResponse> buyProducts(@RequestBody ProductBuyRequest productBuyRequest) {
 
-        productUserService.editProduct(request);
+        ProductBuyResponse productBuyResponse = productUserService.editProduct(productBuyRequest);
 
-        return ResponseEntity.status(201).build();
+        return ResponseEntity.ok(productBuyResponse);
     }
 }

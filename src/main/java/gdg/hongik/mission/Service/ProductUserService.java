@@ -1,5 +1,7 @@
 package gdg.hongik.mission.Service;
 
+import gdg.hongik.mission.DTO.ProductBuyRequest;
+import gdg.hongik.mission.DTO.ProductBuyResponse;
 import gdg.hongik.mission.Entity.Product;
 import gdg.hongik.mission.Repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ public class ProductUserService {
         this.productRepository = productRepository;
     }
 
-    // 이름으로 상품 찾아오기
+    // 이름으로 상품 조회하기
     public Product findProductByName(String name) {
 
         //리포지토리에서 찾아오기
@@ -34,22 +36,27 @@ public class ProductUserService {
     }
 
     // 상품 재고 수정
-    public void editProduct(Map<String, List<Map<String, Object>>> request) {
+    public ProductBuyResponse editProduct(ProductBuyRequest productBuyRequest) {
 
-        // JSON의 "orderProducts" 키로 리스트를 꺼냅니다.
-        List<Map<String, Object>> orderProducts = request.get("orderProducts");
+        // 응답 정보를 담기 위해 ProductBuyResponse DTO 생성
+        ProductBuyResponse productBuyResponse = new ProductBuyResponse();
 
-        // Map 하나씩 돌며 수정 로직 호출하기
-        for (Map<String, Object> item : orderProducts) {
-            // Map에서 값을 꺼낼 때 형변환이 필요합니다.
-            long id = Long.valueOf(item.get("id").toString());
-            int quantity = (Integer) item.get("quantity");
+        // List 하나씩 돌며 수정 로직 호출하기
+        for ( ProductBuyRequest.OrderRequest orderRequest : productBuyRequest.getOrderProducts() ) {
+
+            //
+            long id = orderRequest.getId();
+            int quantity = orderRequest.getQuantity();
 
             Product product = productRepository.findById(id).get();
+
+            // 응답 생성 로직 실행
+            productBuyResponse.new OrderedProduct(product, quantity);
 
             // 재고 감소시키는 로직 수행
             product.decreaseStock(quantity);
             productRepository.save(product);
         }
+        return productBuyResponse;
     }
 }

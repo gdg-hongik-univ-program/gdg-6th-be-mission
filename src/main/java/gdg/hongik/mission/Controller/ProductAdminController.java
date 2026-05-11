@@ -1,5 +1,6 @@
 package gdg.hongik.mission.Controller;
 
+import gdg.hongik.mission.DTO.*;
 import gdg.hongik.mission.Entity.Product;
 import gdg.hongik.mission.Service.ProductAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,28 +23,28 @@ public class ProductAdminController {
 
     //상품 등록
     @PostMapping("/products")
-    public ResponseEntity<?> addProduct(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<Void> addProduct(@RequestBody ProductSaveRequest productSaveRequest) {
 
-        productAdminService.addProduct(request);
+        productAdminService.addProduct(productSaveRequest);
 
         return ResponseEntity.ok().build();
     }
 
     //재고 추가
     @PatchMapping("/products/{id}/stock")
-    public ResponseEntity<?> addStock(@PathVariable Long id, @RequestBody Map<String, Object> request) {
+    public ResponseEntity<?> addStock(@PathVariable Long id, @RequestBody StockAddRequest stockAddRequest) {
 
-        productAdminService.addStock(id, request);
+        StockAddResponse stockAddResponse = productAdminService.addStock(id, stockAddRequest);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(stockAddResponse);
     }
 
     //상품 삭제
     @DeleteMapping("/products")
-    public ResponseEntity<?> deleteProduct(@RequestBody Map<String, List<Long>> request) {
+    public ResponseEntity<ProductDeleteResponse> deleteProduct(@RequestBody ProductDeleteRequest productDeleteRequest) {
 
-        List<Product> remainProducts = productAdminService.deleteProduct(request);
+        ProductDeleteResponse productDeleteResponse = productAdminService.deleteProduct(productDeleteRequest);
 
-        return ResponseEntity.ok(remainProducts);
+        return ResponseEntity.ok(productDeleteResponse);
     }
 }
