@@ -1,13 +1,4 @@
 package gdg.hongik.mission.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+public record StockAddResponse (String name, int stock){}
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class StockAddResponse {
-    private String name;
-    private int stock;
-}

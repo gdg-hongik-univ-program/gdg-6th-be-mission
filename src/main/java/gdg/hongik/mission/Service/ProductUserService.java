@@ -7,6 +7,9 @@ import gdg.hongik.mission.Repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -33,24 +36,33 @@ public class ProductUserService {
     public ProductBuyResponse editProduct(ProductBuyRequest productBuyRequest) {
 
         // 응답 정보를 담기 위해 ProductBuyResponse DTO 생성
-        ProductBuyResponse productBuyResponse = new ProductBuyResponse();
+        List<ProductBuyResponse.OrderedProduct> orderedProductList = new ArrayList<>();
+
+        int totalPrice = 0;
 
         // List 하나씩 돌며 수정 로직 호출하기
-        for ( ProductBuyRequest.OrderRequest orderRequest : productBuyRequest.getOrderProducts() ) {
+        for ( ProductBuyRequest.OrderRequest orderRequest : productBuyRequest.orderProducts() ) {
 
             //
-            long id = orderRequest.getId();
-            int quantity = orderRequest.getQuantity();
+            long id = orderRequest.id();
+            int quantity = orderRequest.quantity();
 
             Product product = productRepository.findById(id).get();
 
+            // 해당 상품 총 구매액과 전체 주문액 계산
+            int subTotal = product.getPrice() * quantity;
+
+            totalPrice += subTotal;
+
             // 응답 생성 로직 실행
-            productBuyResponse.new OrderedProduct(product, quantity);
+            orderedProductList.add(
+                    ProductBuyResponse.OrderedProduct.from(product, quantity, subTotal));
 
             // 재고 감소시키는 로직 수행
             product.decreaseStock(quantity);
             productRepository.save(product);
         }
-        return productBuyResponse;
+
+        return new ProductBuyResponse(totalPrice, orderedProductList);
     }
 }

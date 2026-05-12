@@ -18,25 +18,25 @@ public class ProductAdminService {
     public void addProduct(ProductSaveRequest productSaveRequest) {
 
         // 중복 체크
-        if ( productRepository.findByName(productSaveRequest.getName()) != null) {
+        if ( productRepository.findByName(productSaveRequest.name()) != null) {
             throw new RuntimeException("이미 존재하는 상품 이름입니다.");
         }
 
         Product product = Product.builder()
-                                .name(productSaveRequest.getName())
-                                .price(productSaveRequest.getPrice())
-                                .stock(productSaveRequest.getStock())
+                                .name(productSaveRequest.name())
+                                .price(productSaveRequest.price())
+                                .stock(productSaveRequest.stock())
                                 .build();
-        
+
         //DB에 저장하기
         productRepository.save(product);
     }
 
 
-    // 상품 재고 수정
+    // 상품 재고 추가
     public StockAddResponse addStock(Long id, StockAddRequest stockAddRequest) {
 
-        int newStock = stockAddRequest.getAdditionalQuantity();
+        int newStock = stockAddRequest.additionalQuantity();
 
         if(newStock <= 0) {
             throw new RuntimeException("추가할 재고는 양수여야합니다.");
@@ -52,7 +52,7 @@ public class ProductAdminService {
     public ProductDeleteResponse deleteProduct(ProductDeleteRequest productDeleteRequest) {
 
         // 존재하는 상품인지 확인하며 하나씩 삭제한다.
-        for (Long id : productDeleteRequest.getProductIds()) {
+        for (Long id : productDeleteRequest.productIds()) {
 
             // 존재하는 상품인지 확인
             if(productRepository.findById(id).isEmpty()) {
@@ -65,14 +65,11 @@ public class ProductAdminService {
         // 삭제 후 남은 객체들 리스트에 담기
         List<Product> remains = productRepository.findAll();
 
-        ProductDeleteResponse deleteResponse = new ProductDeleteResponse();
+        List<ProductDeleteResponse.RemainProduct> remainProducts
+                = remains.stream()
+                .map(ProductDeleteResponse.RemainProduct::from)
+                .toList();
 
-        for(Product product : remains) {
-            deleteResponse.new RemainProduct(
-                    product.getName(),
-                    product.getStock()
-            );
-        }
-        return deleteResponse;
+        return new ProductDeleteResponse(remainProducts);
     }
 }
