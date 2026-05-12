@@ -3,12 +3,12 @@ package gdg.hongik.mission.Controller;
 import gdg.hongik.mission.DTO.*;
 import gdg.hongik.mission.Service.ProductAdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class ProductAdminController {
 
@@ -20,12 +20,12 @@ public class ProductAdminController {
 
         productAdminService.addProduct(productSaveRequest);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     //재고 추가
     @PatchMapping("/products/{id}/stock")
-    public ResponseEntity<?> addStock(@PathVariable Long id, @RequestBody StockAddRequest stockAddRequest) {
+    public ResponseEntity<StockAddResponse> addStock(@PathVariable Long id, @RequestBody StockAddRequest stockAddRequest) {
 
         StockAddResponse stockAddResponse = productAdminService.addStock(id, stockAddRequest);
 
