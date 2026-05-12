@@ -4,21 +4,15 @@ import gdg.hongik.mission.DTO.ProductBuyRequest;
 import gdg.hongik.mission.DTO.ProductBuyResponse;
 import gdg.hongik.mission.Entity.Product;
 import gdg.hongik.mission.Repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class ProductUserService {
 
     private final ProductRepository productRepository;
-
-    @Autowired
-    public ProductUserService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
 
     // 이름으로 상품 조회하기
     public Product findProductByName(String name) {

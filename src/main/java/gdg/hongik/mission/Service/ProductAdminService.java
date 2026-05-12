@@ -3,22 +3,16 @@ package gdg.hongik.mission.Service;
 import gdg.hongik.mission.DTO.*;
 import gdg.hongik.mission.Entity.Product;
 import gdg.hongik.mission.Repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ProductAdminService {
 
     private final ProductRepository productRepository;
-
-    @Autowired
-    public ProductAdminService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
 
     // 새 상품 DB에 등록
     public void addProduct(ProductSaveRequest productSaveRequest) {
@@ -28,10 +22,12 @@ public class ProductAdminService {
             throw new RuntimeException("이미 존재하는 상품 이름입니다.");
         }
 
-        Product product = new Product(
-                productSaveRequest.getName(),
-                productSaveRequest.getStock(),
-                productSaveRequest.getPrice());
+        Product product = Product.builder()
+                                .name(productSaveRequest.getName())
+                                .price(productSaveRequest.getPrice())
+                                .stock(productSaveRequest.getStock())
+                                .build();
+        
         //DB에 저장하기
         productRepository.save(product);
     }

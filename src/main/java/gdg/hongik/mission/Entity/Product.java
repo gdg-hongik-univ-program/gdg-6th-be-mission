@@ -1,33 +1,23 @@
 package gdg.hongik.mission.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
     private int stock;
     private int price;
 
-    // 생성자
-    public Product(String name, int stock, int price) {
-        this.price = price;
-        this.name = name;
-        this.stock = stock;
-    }
-
+    // 재고 수 증가 메서드 - 어드민이 재고 추가 시 사용
     public void addStock(int newStock) {
 
         if ( newStock < 0 ) {
@@ -37,6 +27,7 @@ public class Product {
         stock += newStock;
     }
 
+    // 재고 수 감소 메서드 - 유저가 상품 주문 시 사용
     public void decreaseStock(int stock) {
         if ( this.stock < stock) {
             throw new RuntimeException("재고가 부족합니다.");

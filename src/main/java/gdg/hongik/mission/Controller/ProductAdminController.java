@@ -1,25 +1,18 @@
 package gdg.hongik.mission.Controller;
 
 import gdg.hongik.mission.DTO.*;
-import gdg.hongik.mission.Entity.Product;
 import gdg.hongik.mission.Service.ProductAdminService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
 
 @Controller
+@RequiredArgsConstructor
 public class ProductAdminController {
 
     private final ProductAdminService productAdminService;
-
-    @Autowired
-    public ProductAdminController(ProductAdminService productAdminService) {
-        this.productAdminService = productAdminService;
-    }
 
     //상품 등록
     @PostMapping("/products")

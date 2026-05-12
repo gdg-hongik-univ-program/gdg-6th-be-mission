@@ -4,20 +4,16 @@ import gdg.hongik.mission.DTO.ProductBuyRequest;
 import gdg.hongik.mission.DTO.ProductBuyResponse;
 import gdg.hongik.mission.Entity.Product;
 import gdg.hongik.mission.Service.ProductUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequiredArgsConstructor
 public class ProductUserController {
 
     private final ProductUserService productUserService;
-
-    @Autowired
-    public ProductUserController(ProductUserService productUserService) {
-        this.productUserService = productUserService;
-    }
 
     //상품 조회
     @GetMapping("/products")
