@@ -1,7 +1,5 @@
 package gdg.hongik.mission.controller;
-import gdg.hongik.mission.dto.AddStockRequest;
-import gdg.hongik.mission.dto.DeleteProductRequest;
-import gdg.hongik.mission.dto.ProductCreateRequest;
+import gdg.hongik.mission.dto.*;
 import gdg.hongik.mission.entity.Product;
 import gdg.hongik.mission.service.ProductAdminService;
 import org.springframework.web.bind.annotation.*;
@@ -19,14 +17,14 @@ public class ProductAdminController {
 
     // 1. 상품 등록
     @PostMapping("/products")
-    public Object createProduct(@RequestBody ProductCreateRequest request) {
+    public ProductResponse createProduct(@RequestBody ProductCreateRequest request) {
 
         return productAdminService.createProduct(request);
     }
 
     // 2. 재고 추가
     @PatchMapping("/products/{productId}")
-    public Map<String, Object> addStock(
+    public AddStockResponse addStock(
             @PathVariable Long productId,
             @RequestBody AddStockRequest request
     ) {
@@ -36,10 +34,8 @@ public class ProductAdminController {
 
     // 3. 상품 삭제
     @DeleteMapping("/products")
-    public Map<String, Object> deleteProducts(@RequestBody DeleteProductRequest request) {
-
+    public DeleteProductsResponse deleteProducts(@RequestBody DeleteProductRequest request) {
         {
-
             return productAdminService.deleteProducts(request);
         }
     }

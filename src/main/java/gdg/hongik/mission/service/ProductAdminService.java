@@ -1,5 +1,6 @@
 package gdg.hongik.mission.service;
 
+import gdg.hongik.mission.dto.*;
 import gdg.hongik.mission.entity.Product;
 import gdg.hongik.mission.repository.ProductRepository;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,32 +20,35 @@ public class ProductAdminService {
         this.productRepository = productRepository;
     }
 
-    public Object createProduct( Map<String, Object> request) {
+    public ProductResponse createProduct(ProductCreateRequest request) {
 
-        String productName = (String) request.get("productName");
+        String productName = (String) request.productName();
         List<Product> products = productRepository.findAll();
         // 중복 검사
         for (Product p : products) {
             if (p.getProductName().equals(productName)) {
-                Map<String, Object> error = new HashMap<>();
-                error.put("error", "상품이 이미 존재합니다");
-                return error;
+                throw new RuntimeException("상품이 이미 존재합니다.");
             }
         }
 
         Product product = new Product();
         product.setProductName(productName);
-        product.setProductPrice((int) request.get("productPrice"));
-        product.setRemainQuantity((int) request.get("remainQuantity"));
+        product.setProductPrice(request.productPrice());
+        product.setRemainQuantity(request.remainQuantity());
 
-        products.add(product);
+        Product saveProduct = productRepository.save(product);
 
-        return product;
+        return new ProductResponse(
+                saveProduct.getProductId(),
+                saveProduct.getProductName(),
+                saveProduct.getProductPrice(),
+                saveProduct.getRemainQuantity()
+        );
     }
 
-    public Map<String, Object> addStock( Long productId, Map<String, Object> request ) {
+    public AddStockResponse addStock( Long productId, AddStockRequest request ) {
 
-        int addQuantity = (int) request.get("addQuantity");
+        int addQuantity = (int) request.addQuantity();
         List<Product> products = productRepository.findAll();
         Product product = null;
 
@@ -61,41 +65,36 @@ public class ProductAdminService {
 
         product.setRemainQuantity(product.getRemainQuantity() + addQuantity);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("productName", product.getProductName());
-        response.put("remainQuantity", product.getRemainQuantity());
 
-        return response;
+        return new AddStockResponse(
+                product.getProductName(),
+                product.getRemainQuantity()
+        );
     }
 
     // 3. 상품 삭제
-    public Map<String, Object> deleteProducts( Map<String, Object> request) {
+    public DeleteProductsResponse deleteProducts( DeleteProductRequest request) {
 
-        List<Long> productIds = (List<Long>) request.get("productIds");
+        List<Long> productIds =  request.productIds();
         List<Product> products = productRepository.findAll();
         
         for (int i = 0; i < products.size(); i++) {
             Product p = products.get(i);
 
             if (productIds.contains(p.getProductId())) {
-               products.remove(i);
+               productRepository.delete(p);
                 i--; // 인덱스 보정
             }
         }
 
-        List<Map<String, Object>> result = new ArrayList<>();
+        List<DeleteProductResponse> result = new ArrayList<>();
 
         for (Product p : products) {
-            Map<String, Object> temp = new HashMap<>();
-            temp.put("productName", p.getProductName());
-            temp.put("remainQuantity", p.getRemainQuantity());
+            DeleteProductResponse temp = new DeleteProductResponse(p.getProductName(),p.getRemainQuantity());
             result.add(temp);
         }
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("products", result);
-
-        return response;
+        return new DeleteProductsResponse(result);
     }
 
 }
