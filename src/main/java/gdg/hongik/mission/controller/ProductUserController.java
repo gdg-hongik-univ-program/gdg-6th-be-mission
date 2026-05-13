@@ -1,5 +1,6 @@
 package gdg.hongik.mission.controller;
 import gdg.hongik.mission.dto.OrderRequest;
+import gdg.hongik.mission.dto.OrderResponse;
 import org.springframework.web.bind.annotation.*;
 import gdg.hongik.mission.service.ProductUserService;
 import java.util.*;
@@ -14,7 +15,7 @@ public class ProductUserController {
 
     // 상품 구매 요청
     @PostMapping("/orders")
-    public Map<String, Object> purchase(
+    public OrderResponse purchase(
             @RequestBody OrderRequest request
     ) {
 

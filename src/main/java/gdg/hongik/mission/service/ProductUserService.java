@@ -1,4 +1,8 @@
 package gdg.hongik.mission.service;
+import gdg.hongik.mission.dto.OrderProductRequest;
+import gdg.hongik.mission.dto.OrderProductResponse;
+import gdg.hongik.mission.dto.OrderRequest;
+import gdg.hongik.mission.dto.OrderResponse;
 import gdg.hongik.mission.entity.Product;
 import gdg.hongik.mission.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -15,22 +19,22 @@ public class ProductUserService {
         this.productRepository = productRepository;
     }
 
-    public Map<String, Object> purchase( Map<String, Object> request) {
+    public OrderResponse purchase(OrderRequest request) {
 
-        List<Map<String, Object>> orderProducts =
-                (List<Map<String, Object>>) request.get("orderProducts");
+        List<OrderProductRequest> orderProducts =
+                request.orderProducts();
 
-        int totalAmount = 0;
-        List<Map<String, Object>> result = new ArrayList<>();
+        int totalAmount = 0;  // 총 구매 금액
+        List<OrderProductResponse> result = new ArrayList<>();
 
         List<Product> products = productRepository.findAll();
 
         for (int i = 0; i < orderProducts.size(); i++) {
 
-            Map<String, Object> item = orderProducts.get(i);
+            OrderProductRequest item = orderProducts.get(i);
 
-            Long productId = Long.valueOf(item.get("productId").toString());
-            int quantity = (int) item.get("quantity");
+            Long productId = item.productId();
+            int quantity = item.quantity();
 
             Product product = null;
 
@@ -50,23 +54,25 @@ public class ProductUserService {
             }
 
             product.setRemainQuantity(product.getRemainQuantity() - quantity);
+            productRepository.save(product);
 
             int amount = product.getProductPrice() * quantity;
             totalAmount += amount;
 
-            Map<String, Object> temp = new HashMap<>();
-            temp.put("productName", product.getProductName());
-            temp.put("quantity", quantity);
-            temp.put("amount", amount);
+            OrderProductResponse temp = new OrderProductResponse(
+                   product.getProductId(),
+                    product.getProductName(),
+                    quantity,
+                    amount
+            );
 
             result.add(temp);
         }
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("orderId", "Ord" + System.currentTimeMillis()); // 매번 다른 주문Id를 생성하기 위해
-        response.put("price", totalAmount);
-        response.put("orderProducts", result);
-
-        return response;
+        return new OrderResponse(
+                "ord"+System.currentTimeMillis(),
+                totalAmount,
+                result
+        );
     }
 }
