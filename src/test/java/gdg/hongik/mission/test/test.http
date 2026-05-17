@@ -1,0 +1,62 @@
+### 상품 등록
+POST http://localhost:8081/admin/products
+Content-Type: application/json
+
+{
+  "name": "에어팟",
+  "price": 190000,
+  "stock": 10
+}
+
+###
+
+### 상품 등록
+POST http://localhost:8081/admin/products
+Content-Type: application/json
+
+{
+  "name": "버즈",
+  "price": 170000,
+  "stock": 5
+}
+
+###
+
+### 전체 상품 조회
+GET http://localhost:8081/products
+
+###
+
+### 상품명 조회
+GET http://localhost:8081/products/에어팟
+
+###
+
+### 재고 추가
+PATCH http://localhost:8081/admin/products/1/stock
+Content-Type: application/json
+
+{
+  "quantity": 5
+}
+
+###
+
+### 상품 구매
+POST http://localhost:8081/products/buy
+Content-Type: application/json
+
+[
+  {
+    "id": 1,
+    "quantity": 2
+  }
+]
+
+###
+
+### 여러 상품 삭제
+DELETE http://localhost:8081/admin/products
+Content-Type: application/json
+
+[1]
