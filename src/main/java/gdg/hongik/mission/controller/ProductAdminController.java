@@ -1,6 +1,5 @@
 package gdg.hongik.mission.controller;
 import gdg.hongik.mission.dto.*;
-import gdg.hongik.mission.entity.Product;
 import gdg.hongik.mission.service.ProductAdminService;
 import org.springframework.web.bind.annotation.*;
 

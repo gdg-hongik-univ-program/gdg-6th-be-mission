@@ -6,6 +6,7 @@ import gdg.hongik.mission.dto.OrderResponse;
 import gdg.hongik.mission.entity.Product;
 import gdg.hongik.mission.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.*;
@@ -19,6 +20,7 @@ public class ProductUserService {
         this.productRepository = productRepository;
     }
 
+    @Transactional
     public OrderResponse purchase(OrderRequest request) {
 
         List<OrderProductRequest> orderProducts =
@@ -54,7 +56,6 @@ public class ProductUserService {
             }
 
             product.setRemainQuantity(product.getRemainQuantity() - quantity);
-            productRepository.save(product);
 
             int amount = product.getProductPrice() * quantity;
             totalAmount += amount;
