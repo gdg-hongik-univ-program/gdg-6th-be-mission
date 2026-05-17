@@ -3,10 +3,13 @@ package gdg.hongik.mission.service;
 import gdg.hongik.mission.dto.*;
 import gdg.hongik.mission.entity.Product;
 import gdg.hongik.mission.repository.ProductRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Service
 public class ProductAdminService {
         private final ProductRepository productRepository;
 
@@ -14,6 +17,7 @@ public class ProductAdminService {
         this.productRepository = productRepository;
     }
 
+    @Transactional
     public ProductResponse createProduct(ProductCreateRequest request) {
 
         String productName = (String) request.productName();
@@ -40,6 +44,7 @@ public class ProductAdminService {
         );
     }
 
+    @Transactional
     public AddStockResponse addStock( Long productId, AddStockRequest request ) {
 
         int addQuantity = (int) request.addQuantity();
@@ -67,23 +72,17 @@ public class ProductAdminService {
     }
 
     // 3. 상품 삭제
+    @Transactional
     public DeleteProductsResponse deleteProducts( DeleteProductRequest request) {
 
         List<Long> productIds =  request.productIds();
-        List<Product> products = productRepository.findAll();
-        
-        for (int i = 0; i < products.size(); i++) {
-            Product p = products.get(i);
+        productRepository.deleteAllById(productIds);
 
-            if (productIds.contains(p.getProductId())) {
-               productRepository.delete(p);
-                i--; // 인덱스 보정
-            }
-        }
+        List<Product> remainProducts = productRepository.findAll();
 
         List<DeleteProductResponse> result = new ArrayList<>();
 
-        for (Product p : products) {
+        for (Product p : remainProducts) {
             DeleteProductResponse temp = new DeleteProductResponse(p.getProductName(),p.getRemainQuantity());
             result.add(temp);
         }
