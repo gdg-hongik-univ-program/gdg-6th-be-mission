@@ -1,8 +1,5 @@
 package gdg.hongik.mission.service;
-import gdg.hongik.mission.dto.OrderProductRequest;
-import gdg.hongik.mission.dto.OrderProductResponse;
-import gdg.hongik.mission.dto.OrderRequest;
-import gdg.hongik.mission.dto.OrderResponse;
+import gdg.hongik.mission.dto.*;
 import gdg.hongik.mission.entity.Product;
 import gdg.hongik.mission.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -18,6 +15,21 @@ public class ProductUserService {
 
     public ProductUserService(ProductRepository productRepository) {
         this.productRepository = productRepository;
+    }
+
+    @Transactional(readOnly = true)
+    public ProductResponse getProduct(String name) {
+        // 1. 이름으로 DB에서 엔티티 조회 (없으면 에러)
+        Product product = productRepository.findByProductName(name)
+                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+
+        // 2. 조회된 Product 엔티티의 데이터를 ProductResponse 레코드에 담아서 반환
+        return new ProductResponse(
+                product.getProductId(),
+                product.getProductName(),
+                product.getProductPrice(),
+                product.getRemainQuantity()
+        );
     }
 
     @Transactional
