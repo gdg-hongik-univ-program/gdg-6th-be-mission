@@ -16,6 +16,7 @@ public class ProductRepository {
     @PersistenceContext //JPA의 EntityManager를 스프링이 자동으로 넣어주도록 하는 어노테이션
     private EntityManager em;
 
+
     // 상품 id로 상품 1개 조회
     public Product findById(Long id) { return em.find(Product.class, id); }
 

@@ -1,5 +1,6 @@
 package gdg.hongik.mission.Service;
 
+import gdg.hongik.mission.DTO.ProductResponse;
 import gdg.hongik.mission.DTO.PurchaseProductRequest;
 import gdg.hongik.mission.DTO.PurchaseProductResponse;
 import gdg.hongik.mission.Entity.Product;
@@ -7,6 +8,7 @@ import gdg.hongik.mission.Repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductUserService {
     private final ProductRepository productRepository;
+
+
 
     // 소비자: 상품명으로 상품 조회
     @Transactional(readOnly = true)

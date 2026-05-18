@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 //UserController에서 어노테이션 설명
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/admin/products")
 @RequiredArgsConstructor
@@ -41,6 +42,7 @@ public class ProductAdminController {
     @PostMapping
     public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductCreateRequest request) {
         Product savedProduct = productAdminService.createProduct(request.toEntity());
+
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new ProductResponse(savedProduct));
     }

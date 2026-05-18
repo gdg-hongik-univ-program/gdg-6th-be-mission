@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
+// swagger 문서화 작업 -> http://localhost:8080/swagger-ui/index.html
+
+//192.168.134.160
+@CrossOrigin(origins = "*")
 @RestController
 // 이 클래스가 REST API 요청을 처리하는 Controller이다.
 // 각 메서드의 반환값은 HTML 화면이 아니라 JSON 응답 데이터로 반환
@@ -21,9 +27,13 @@ public class ProductUserController {
 
     private final ProductUserService productUserService;
 
+
+
+
+
     // 소비자: 상품명으로 상품 조회
     //GET 요청으로 쿼리 파라미터로 상품명을 받는다.
-    // 요청 예시: GET /user/products?name=얼박사
+    // 요청 예시: GET /user/products?name=얼박사 아래부터 POSTMAN 실습
     // 응답 예시:
     //{
     //    "id": 1,
