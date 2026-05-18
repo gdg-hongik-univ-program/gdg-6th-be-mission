@@ -13,6 +13,10 @@ public class ProductUserController {
         this.productUserService = productUserService;
     }
 
+    @GetMapping("/products")
+    public ProductResponse getProduct(@RequestParam String name) {
+        return productUserService.getProduct(name);
+    }
     // 상품 구매 요청
     @PostMapping("/orders")
     public OrderResponse purchase(
