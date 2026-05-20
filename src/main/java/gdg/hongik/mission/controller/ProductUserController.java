@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import gdg.hongik.mission.service.ProductUserService;
 import java.util.*;
 
+@CrossOrigin(origins = "*")
 @RestController
 public class ProductUserController {
     private final ProductUserService productUserService;

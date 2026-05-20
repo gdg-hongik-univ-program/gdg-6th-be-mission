@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductAdminService {
@@ -45,14 +46,14 @@ public class ProductAdminService {
     }
 
     @Transactional
-    public AddStockResponse addStock( Long productId, AddStockRequest request ) {
-
+    public AddStockResponse addStock( String productName, AddStockRequest request ) {
+        System.out.println("==========" + productName);
         int addQuantity = (int) request.addQuantity();
         List<Product> products = productRepository.findAll();
         Product product = null;
 
         for (Product p : products) {
-            if (p.getProductId().equals(productId)) {
+            if (p.getProductName().equals(productName)) {
                 product = p;
                 break;
             }
@@ -73,19 +74,20 @@ public class ProductAdminService {
 
     // 3. 상품 삭제
     @Transactional
-    public DeleteProductsResponse deleteProducts( DeleteProductRequest request) {
+    public DeleteProductsResponse deleteProduct(String productName) {
 
-        List<Long> productIds =  request.productIds();
-        productRepository.deleteAllById(productIds);
+        // 1. 요청 값 확인 (가장 먼저 실행)
+        System.out.println("프론트에서 넘어온 삭제할 상품명: " + productName);
 
+        // 2. 상품 삭제
+        productRepository.deleteByProductName(productName);
+
+        // 3. 남은 상품 목록 조회
         List<Product> remainProducts = productRepository.findAll();
 
-        List<DeleteProductResponse> result = new ArrayList<>();
-
-        for (Product p : remainProducts) {
-            DeleteProductResponse temp = new DeleteProductResponse(p.getProductName(),p.getRemainQuantity());
-            result.add(temp);
-        }
+        List<DeleteProductResponse> result = remainProducts.stream()
+                .map(p -> new DeleteProductResponse(p.getProductName(), p.getRemainQuantity()))
+                .collect(Collectors.toList()); // Java 16 이상이라면 .toList() 로 짧게 쓸 수 있습니다.
 
         return new DeleteProductsResponse(result);
     }
