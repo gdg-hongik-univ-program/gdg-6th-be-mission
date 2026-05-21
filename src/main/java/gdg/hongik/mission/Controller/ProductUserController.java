@@ -5,11 +5,11 @@ import gdg.hongik.mission.DTO.PurchaseProductRequest;
 import gdg.hongik.mission.DTO.PurchaseProductResponse;
 import gdg.hongik.mission.Entity.Product;
 import gdg.hongik.mission.Service.ProductUserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -77,7 +77,8 @@ public class ProductUserController {
     //]
     @PostMapping("/order") // 3주차에서 경로 수정
     public ResponseEntity<List<PurchaseProductResponse>> purchaseProduct(
-            @RequestBody List<PurchaseProductRequest> requestProducts)
+            @Valid @RequestBody List<@Valid PurchaseProductRequest> requestProducts)
+            // 바깥 Valid 는 요청 바디 검증, 안쪽 Valid 는 리스트 안 DTO 검증
     {
         List<PurchaseProductResponse> purchasedProducts = productUserService.purchaseProducts(requestProducts);
 

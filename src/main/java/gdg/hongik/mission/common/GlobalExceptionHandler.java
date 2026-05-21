@@ -3,6 +3,7 @@ package gdg.hongik.mission.common;
 import gdg.hongik.mission.common.DTO.ErrorResponse;
 import gdg.hongik.mission.common.exception.BadRequestException;
 import gdg.hongik.mission.common.exception.NotFoundException;
+import gdg.hongik.mission.common.message.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -43,7 +44,7 @@ public class GlobalExceptionHandler {
     //위의 에러처리 외의 것들은 500으로 처리한다. (가독성)
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorResponse> handleUnknownException(Exception e) {
-        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(ErrorMessage.SERVER_ERROR);
         return ResponseEntity.internalServerError().body(errorResponse);
         //500 서버에러 내면서 message를 json형태로 바디에 담아서 넘김
     }

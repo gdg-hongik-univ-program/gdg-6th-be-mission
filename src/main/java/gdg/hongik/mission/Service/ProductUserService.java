@@ -1,6 +1,5 @@
 package gdg.hongik.mission.Service;
 
-import gdg.hongik.mission.DTO.ProductResponse;
 import gdg.hongik.mission.DTO.PurchaseProductRequest;
 import gdg.hongik.mission.DTO.PurchaseProductResponse;
 import gdg.hongik.mission.Entity.Product;
@@ -11,7 +10,6 @@ import gdg.hongik.mission.common.message.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,11 +48,11 @@ public class ProductUserService {
             int requestQuantity = requestProduct.getQuantity();
 
             if (requestQuantity <= 0) {
-                throw new BadRequestException("구매 수량은 1개 이상이어야 합니다.");
+                throw new BadRequestException(ErrorMessage.PRODUCT_ORDER_RANGE);
             }
 
             if (product.getQuantity() < requestQuantity) {
-                throw new BadRequestException("재고가 부족합니다.");
+                throw new BadRequestException(ErrorMessage.PRODUCT_STOCK_NOT_ENOUGH);
             }
 
             product.setQuantity(product.getQuantity() - requestQuantity);

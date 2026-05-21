@@ -9,15 +9,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List; //사용되지 않음
-
 @Service
 @RequiredArgsConstructor //final 필드를 매개변수로 받는 생성자를 lombok이 자동으로 만들어준다
 public class ProductAdminService {
     private final ProductRepository productRepository; //생성자 주입, @RequiredArgsConstructor 해도 필수 선언
-
+    
+    // 관리자: 상품 등록
     @Transactional
     public Product createProduct(Product product) {
+
+        if (product == null) {
+            throw new BadRequestException(ErrorMessage.PRODUCT_INFO_REQUIRED);
+        }
+
         Product existingProduct = productRepository.findByName(product.getName());
 
         if (existingProduct != null) {
@@ -39,8 +43,8 @@ public class ProductAdminService {
             throw new NotFoundException(ErrorMessage.PRODUCT_NOT_FOUND);
         }
 
-        if (quantity <= 0) {
-            throw new BadRequestException("추가할 재고 수량은 1개 이상이어야 합니다.");
+        if (quantity < 1 || quantity > 255) {
+            throw new BadRequestException(ErrorMessage.PRODUCT_QUANTITY_RANGE);
         }
 
         product.setQuantity(product.getQuantity() + quantity);

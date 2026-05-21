@@ -6,9 +6,8 @@ import gdg.hongik.mission.DTO.ProductDeleteRequest;
 import gdg.hongik.mission.DTO.ProductResponse;
 import gdg.hongik.mission.Entity.Product;
 import gdg.hongik.mission.Service.ProductAdminService;
-import lombok.Getter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +39,7 @@ public class ProductAdminController {
     //    "quantity": 10
     //}
     @PostMapping
-    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductCreateRequest request) {
+    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductCreateRequest request) {
         Product savedProduct = productAdminService.createProduct(request.toEntity());
 
 
@@ -65,7 +64,7 @@ public class ProductAdminController {
     //    "quantity": 15
     //}
     @PatchMapping("/{productId}")
-    public ResponseEntity<ProductResponse> addStock(@PathVariable Long productId, @RequestBody AddStockRequest request) {
+    public ResponseEntity<ProductResponse> addStock(@PathVariable Long productId, @Valid @RequestBody AddStockRequest request) {
         Product product = productAdminService.addStock(productId, request.getAddQuantity());
 
         return ResponseEntity.ok(new ProductResponse(product));
@@ -84,7 +83,7 @@ public class ProductAdminController {
     // 응답 예시: 상품들이 삭제되었습니다.
     //여러 상품을 한번에 삭제하기 위해 삭제할 상품 정보를 List<Product> 형태로 받는다.
     @DeleteMapping
-    public ResponseEntity<String> deleteProduct(@RequestBody List<ProductDeleteRequest> requestProducts) {
+    public ResponseEntity<String> deleteProduct(@Valid @RequestBody List<@Valid ProductDeleteRequest> requestProducts) {
         for (ProductDeleteRequest requestProduct : requestProducts) {
             productAdminService.deleteProduct(requestProduct.getId());
         }
