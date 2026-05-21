@@ -13,7 +13,7 @@ import lombok.Setter;
 // 재고 추가 요청
 public class AddStockRequest {
 
-    @Min(value = 1, message = ErrorMessage.PRODUCT_QUANTITY_RANGE)
-    @Max(value = 255, message = ErrorMessage.PRODUCT_QUANTITY_RANGE)
+    @Min(value = 1, message = ErrorMessage.ADDPRODUCT_QUANTITY_RANGE)
+    @Max(value = 255, message = ErrorMessage.ADDPRODUCT_QUANTITY_RANGE)
     private int addQuantity;
 }

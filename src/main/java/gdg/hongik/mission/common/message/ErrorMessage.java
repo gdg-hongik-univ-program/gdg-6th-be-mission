@@ -12,7 +12,8 @@ public class ErrorMessage {
     public static final String PRODUCT_ID_REQUIRED = "상품 ID 입력은 필수입니다.";
     public static final String PRODUCT_NAME_REQUIRED = "상품 이름 입력은 필수입니다.";
     public static final String PRODUCT_PRICE_RANGE = "상품 가격은 100원 이상 1억원 이하 입니다.";
-    public static final String PRODUCT_QUANTITY_RANGE = "상품 수량은 1개 이상 255개 이하입니다.";
+    public static final String PRODUCT_QUANTITY_RANGE = "등록하실 상품 수량은 1개 이상 255개 이하입니다.";
+    public static final String ADDPRODUCT_QUANTITY_RANGE = "추가하실 상품 수량은 1개 이상 255개 이하입니다.";
 
     public static final String SERVER_ERROR = "서버 내부 에러가 발생했습니다.";
 
