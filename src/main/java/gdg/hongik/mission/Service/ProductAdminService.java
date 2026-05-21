@@ -39,12 +39,14 @@ public class ProductAdminService {
     public Product addStock(Long id, int quantity) {
         Product product = productRepository.findById(id);
 
+        // JpaRepository.findById(id) 는 null을 반환하지 않음
+        // 직접 만든 인터페이스는 null반환
         if (product == null) {
             throw new NotFoundException(ErrorMessage.PRODUCT_NOT_FOUND);
         }
 
         if (quantity < 1 || quantity > 255) {
-            throw new BadRequestException(ErrorMessage.PRODUCT_QUANTITY_RANGE);
+            throw new BadRequestException(ErrorMessage.ADD_PRODUCT_QUANTITY_RANGE);
         }
 
         product.setQuantity(product.getQuantity() + quantity);
