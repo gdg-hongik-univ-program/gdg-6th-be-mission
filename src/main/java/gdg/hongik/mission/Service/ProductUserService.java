@@ -5,6 +5,9 @@ import gdg.hongik.mission.DTO.PurchaseProductRequest;
 import gdg.hongik.mission.DTO.PurchaseProductResponse;
 import gdg.hongik.mission.Entity.Product;
 import gdg.hongik.mission.Repository.ProductRepository;
+import gdg.hongik.mission.common.exception.BadRequestException;
+import gdg.hongik.mission.common.exception.NotFoundException;
+import gdg.hongik.mission.common.message.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +29,7 @@ public class ProductUserService {
         Product product = productRepository.findByName(name);
 
         if (product == null) {
-            throw new RuntimeException("해당 상품을 찾을 수 없습니다.");
+            throw new NotFoundException(ErrorMessage.PRODUCT_NOT_FOUND);
         }
 
         return product;
@@ -41,17 +44,17 @@ public class ProductUserService {
             Product product = productRepository.findById(requestProduct.getId());
 
             if (product == null) {
-                throw new RuntimeException("해당 상품을 찾을 수 없습니다.");
+                throw new NotFoundException(ErrorMessage.PRODUCT_NOT_FOUND);
             }
 
             int requestQuantity = requestProduct.getQuantity();
 
             if (requestQuantity <= 0) {
-                throw new RuntimeException("구매 수량은 1개 이상이어야 합니다.");
+                throw new BadRequestException("구매 수량은 1개 이상이어야 합니다.");
             }
 
             if (product.getQuantity() < requestQuantity) {
-                throw new RuntimeException("재고가 부족합니다.");
+                throw new BadRequestException("재고가 부족합니다.");
             }
 
             product.setQuantity(product.getQuantity() - requestQuantity);

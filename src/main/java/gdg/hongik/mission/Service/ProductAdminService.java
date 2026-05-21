@@ -2,6 +2,9 @@ package gdg.hongik.mission.Service;
 
 import gdg.hongik.mission.Entity.Product;
 import gdg.hongik.mission.Repository.ProductRepository;
+import gdg.hongik.mission.common.exception.BadRequestException;
+import gdg.hongik.mission.common.exception.NotFoundException;
+import gdg.hongik.mission.common.message.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +21,7 @@ public class ProductAdminService {
         Product existingProduct = productRepository.findByName(product.getName());
 
         if (existingProduct != null) {
-            throw new RuntimeException("이미 존재하는 상품입니다.");
+            throw new BadRequestException(ErrorMessage.PRODUCT_ALREADY_EXISTS);
         }
 
         productRepository.save(product);
@@ -33,11 +36,11 @@ public class ProductAdminService {
         Product product = productRepository.findById(id);
 
         if (product == null) {
-            throw new RuntimeException("해당 상품을 찾을 수 없습니다.");
+            throw new NotFoundException(ErrorMessage.PRODUCT_NOT_FOUND);
         }
 
         if (quantity <= 0) {
-            throw new RuntimeException("추가할 재고 수량은 1개 이상이어야 합니다.");
+            throw new BadRequestException("추가할 재고 수량은 1개 이상이어야 합니다.");
         }
 
         product.setQuantity(product.getQuantity() + quantity);
@@ -51,7 +54,7 @@ public class ProductAdminService {
         Product product = productRepository.findById(id);
 
         if (product == null) {
-            throw new RuntimeException("해당 상품을 찾을 수 없습니다.");
+            throw new NotFoundException(ErrorMessage.PRODUCT_NOT_FOUND);
         }
 
         productRepository.deleteById(id);
