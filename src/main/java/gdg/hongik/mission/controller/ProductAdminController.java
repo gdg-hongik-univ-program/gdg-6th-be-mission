@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
+
 @RestController
 @CrossOrigin(origins = "*")
+@Validated
 @RequiredArgsConstructor
 @RequestMapping("/admin/products")
 public class ProductAdminController {
@@ -22,9 +26,8 @@ public class ProductAdminController {
     // 상품 등록
     @PostMapping
     public ProductResponse createProduct(
-            @RequestBody ProductCreateRequest request
+            @Valid @RequestBody ProductCreateRequest request
     ) {
-        System.out.println("post 요청 들어옴");
 
         return productAdminService.createProduct(request);
     }
@@ -33,9 +36,8 @@ public class ProductAdminController {
     @PatchMapping("/{id}/stock")
     public ProductResponse addStock(
             @PathVariable Long id,
-            @RequestBody StockUpdateRequest request
+            @Valid @RequestBody StockUpdateRequest request
     ) {
-        System.out.println("patch 요청 들어옴");
 
         return productAdminService.addStock(id, request);
     }
@@ -45,7 +47,6 @@ public class ProductAdminController {
     public List<ProductResponse> deleteProducts(
             @RequestBody List<Long> ids
     ) {
-        System.out.println("delete 요청 들어옴");
 
         return productAdminService.deleteProducts(ids);
     }
