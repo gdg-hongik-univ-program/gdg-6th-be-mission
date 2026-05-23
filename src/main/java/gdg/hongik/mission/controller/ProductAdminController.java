@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RequestMapping("/admin/products")
 public class ProductAdminController {
@@ -23,6 +24,7 @@ public class ProductAdminController {
     public ProductResponse createProduct(
             @RequestBody ProductCreateRequest request
     ) {
+        System.out.println("post 요청 들어옴");
 
         return productAdminService.createProduct(request);
     }
@@ -33,6 +35,7 @@ public class ProductAdminController {
             @PathVariable Long id,
             @RequestBody StockUpdateRequest request
     ) {
+        System.out.println("patch 요청 들어옴");
 
         return productAdminService.addStock(id, request);
     }
@@ -42,6 +45,7 @@ public class ProductAdminController {
     public List<ProductResponse> deleteProducts(
             @RequestBody List<Long> ids
     ) {
+        System.out.println("delete 요청 들어옴");
 
         return productAdminService.deleteProducts(ids);
     }

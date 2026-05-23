@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RequestMapping("/products")
 public class ProductUserController {
@@ -22,6 +23,7 @@ public class ProductUserController {
     public ProductResponse getProduct(
             @PathVariable String name
     ) {
+        System.out.println("Get 요청 들어옴");
 
         return productUserService.getProduct(name);
     }
@@ -29,6 +31,8 @@ public class ProductUserController {
     // 전체 상품 조회
     @GetMapping
     public List<ProductResponse> getProducts() {
+
+        System.out.println("Get 요청 들어옴");
 
         return productUserService.getProducts();
     }
@@ -38,6 +42,7 @@ public class ProductUserController {
     public String buyProduct(
             @RequestBody List<ProductBuyRequest> orders
     ) {
+        System.out.println("buy 요청 들어옴");
 
         return productUserService.buyProduct(orders);
     }
