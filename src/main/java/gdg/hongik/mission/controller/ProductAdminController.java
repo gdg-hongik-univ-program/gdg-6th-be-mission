@@ -3,6 +3,7 @@ package gdg.hongik.mission.controller;
 import gdg.hongik.mission.dto.*;
 import gdg.hongik.mission.entity.Product;
 import gdg.hongik.mission.service.ProductAdminService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,27 +15,29 @@ import java.util.Map;
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
+
 public class ProductAdminController {
 
     private final ProductAdminService productAdminService;
 
     // 상품 등록
     @PostMapping
-    public Product createProduct(@RequestBody ProductCreateRequest request){
+    public Product createProduct(@RequestBody @Valid  ProductCreateRequest request){
         return productAdminService.createProduct(request);
     }
 
     @PatchMapping("/{id}")
     public ProductAddResponse addStock (
             @PathVariable Long id,
-            @RequestBody ProductAddRequest request) {
+            @RequestBody @Valid ProductAddRequest request) {
 
         Long addQuantity = request.addQuantity();
         return productAdminService.addStock(id, addQuantity);
     }
 
     @DeleteMapping
-    public ProductDeleteResponse deleteProducts(@RequestBody ProductDeleteRequest request ){
+    public ProductDeleteResponse deleteProducts(@RequestBody @Valid ProductDeleteRequest request ){
         return productAdminService.deleteProducts(request);
     }
 

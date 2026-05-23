@@ -1,5 +1,6 @@
 package gdg.hongik.mission.entity;
 
+import gdg.hongik.mission.exception.InsufficientStockException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,5 +33,16 @@ public class Product {
         this.name = name;
         this.stockQuantity = stockQuantity;
         this.price = price;
+    }
+
+    public void addStock(Long quantity) {
+        this.stockQuantity += quantity;
+    }
+
+    public void removeStock(Long quantity) {
+        if (this.stockQuantity < quantity) {
+            throw new InsufficientStockException("재고가 부족합니다.");
+        }
+        this.stockQuantity -= quantity;
     }
 }

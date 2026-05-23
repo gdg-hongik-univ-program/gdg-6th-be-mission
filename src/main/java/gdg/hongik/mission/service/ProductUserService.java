@@ -3,6 +3,7 @@ package gdg.hongik.mission.service;
 import gdg.hongik.mission.dto.PurchaseRequest;
 import gdg.hongik.mission.dto.PurchaseResponse;
 import gdg.hongik.mission.entity.Product;
+import gdg.hongik.mission.exception.ProductNotFoundException;
 import gdg.hongik.mission.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,11 +24,8 @@ public class ProductUserService {
     // user의 비즈니스 로직
     // 1. 상품조회 2. 상품 구매
     public Product getProductByName(String name){
-        Product product = productRepository.findByName(name);
-        if(product == null){
-            throw new RuntimeException("해당 이름의 상품이 존재하지 않습니다.");
-        }
-        return product;
+        return productRepository.findByName(name)
+                .orElseThrow(()-> new ProductNotFoundException("해당 이름의 상품이 존재하지 않습니다."));
     }
 
     @Transactional
@@ -43,15 +41,12 @@ public class ProductUserService {
            Long productId = item.productId();
            Long quantity = item.quantity();
 
-            Product targetProduct = productRepository.findById(productId);
+            Product targetProduct = productRepository.findById(productId)
+                    .orElseThrow(()-> new ProductNotFoundException("상품이 존재하지 않습니다."));
 
-            // 상품 없거나 재고 부족할때
-            if (targetProduct == null || targetProduct.getStockQuantity() < quantity) {
-                throw new RuntimeException("상품이 없거나 재고가 부족합니다.");
-            }
+            // Product 엔티티에 removeStock 메서드 추가해서 재고 부족 검사하는 로직 엔티티로 전환
+            targetProduct.removeStock(quantity);
 
-            // 재고에서 구매할 수량만큼 가져오고 총 가격 계산
-            targetProduct.setStockQuantity(targetProduct.getStockQuantity() - quantity);
             long itemTotalPrice = targetProduct.getPrice() * quantity;
             totalPrice += itemTotalPrice;
 

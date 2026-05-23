@@ -1,43 +1,11 @@
 package gdg.hongik.mission.repository;
 
 import gdg.hongik.mission.entity.Product;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 
-import java.util.List;
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
-@Repository
-public class ProductRepository {
-
-
-    @PersistenceContext
-    private EntityManager em;
-
-    public Product findById(Long id){
-        return em.find(Product.class, id);
-    }
-
-    public List<Product> findAll(){
-        return em.createQuery("SELECT p FROM Product p", Product.class).getResultList();
-    }
-
-    public Product findByName(String name){
-        List<Product> result = em.createQuery(
-            "SELECT p FROM Product p WHERE p.name = :name", Product.class
-        ).setParameter("name", name).getResultList();
-
-        return result.isEmpty() ? null : result.get(0);
-    }
-
-    public void save(Product product){
-        em.persist(product);
-    }
-
-    public void deleteById(Long id){
-        Product product = em.find(Product.class, id);
-        if(product != null ){
-            em.remove(product);
-        }
-    }
+    // findByName 쿼리는 관례에 맞춰 메서드 이름만 선언하면 스프링이 알아서 구현해줌.
+    Optional<Product> findByName(String name);
 }

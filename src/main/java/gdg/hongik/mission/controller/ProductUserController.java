@@ -4,6 +4,7 @@ import gdg.hongik.mission.dto.PurchaseRequest;
 import gdg.hongik.mission.dto.PurchaseResponse;
 import gdg.hongik.mission.entity.Product;
 import gdg.hongik.mission.service.ProductUserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 
 public class ProductUserController {
 
@@ -27,7 +29,7 @@ public class ProductUserController {
 
 
     @PostMapping("/orders")
-    public PurchaseResponse purchaseProducts(@RequestBody PurchaseRequest request) {
+    public PurchaseResponse purchaseProducts(@RequestBody @Valid PurchaseRequest request) {
         return productUserService.purchaseProducts(request);
     }
 }
