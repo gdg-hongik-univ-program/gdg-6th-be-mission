@@ -2,7 +2,7 @@ package gdg.hongik.mission.Controller;
 
 import gdg.hongik.mission.DTO.ProductBuyRequest;
 import gdg.hongik.mission.DTO.ProductBuyResponse;
-import gdg.hongik.mission.DTO.ProductFindResponse;
+import gdg.hongik.mission.DTO.ProductDTO;
 import gdg.hongik.mission.Service.ProductUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class ProductUserController {
 
     //상품 조회
     @GetMapping("/products")
-    public ResponseEntity<ProductFindResponse> getProducts(@RequestParam String name) {
+    public ResponseEntity<ProductDTO> getProducts(@RequestParam String name) {
 
         return ResponseEntity.ok(productUserService.findProductByName(name));
     }

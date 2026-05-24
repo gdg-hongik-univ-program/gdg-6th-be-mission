@@ -6,7 +6,6 @@ import jakarta.validation.constraints.*;
 // Admin이 상품 등록 요청에 사용
 public record ProductSaveRequest (
 
-        @NotNull(message = Message.NAME_NOT_NULL)
         @NotEmpty(message = Message.NAME_NOT_BLANK)
         String name,
 

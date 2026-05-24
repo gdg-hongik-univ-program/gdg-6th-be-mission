@@ -2,13 +2,12 @@ package gdg.hongik.mission.Service;
 
 import gdg.hongik.mission.DTO.ProductBuyRequest;
 import gdg.hongik.mission.DTO.ProductBuyResponse;
-import gdg.hongik.mission.DTO.ProductFindResponse;
+import gdg.hongik.mission.DTO.ProductDTO;
 import gdg.hongik.mission.Entity.Product;
 import gdg.hongik.mission.Repository.ProductRepository;
 import gdg.hongik.mission.common.Exception.NotFoundException;
 import gdg.hongik.mission.common.Message;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,14 +23,14 @@ public class ProductUserService {
 
     // 이름으로 상품 조회하기
     @Transactional(readOnly = true)
-    public ProductFindResponse findProductByName(String name) {
+    public ProductDTO findProductByName(String name) {
 
         // 리포지토리에서 조회하기
         Product product = productRepository.findByName(name)
                 .orElseThrow(()-> new NotFoundException(Message.PRODUCT_NOT_EXIST));
 
         // 존재하는 상품이면 정보 반환
-        return  ProductFindResponse.from(product);
+        return  ProductDTO.from(product);
     }
 
     // 상품 구매 (상품 재고 감소시키기)

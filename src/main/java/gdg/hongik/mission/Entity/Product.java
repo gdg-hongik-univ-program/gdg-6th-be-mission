@@ -19,11 +19,6 @@ public class Product {
 
     // 재고 수 증가 메서드 - 어드민이 재고 추가 시 사용
     public void addStock(int newStock) {
-
-        if ( newStock < 0 ) {
-            throw new RuntimeException("추가되는 재고는 양수여야합니다.") ;
-        }
-
         stock += newStock;
     }
 

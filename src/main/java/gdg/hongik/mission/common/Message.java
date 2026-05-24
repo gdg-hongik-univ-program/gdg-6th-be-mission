@@ -8,7 +8,6 @@ public class Message {
 
 
     // 상품 DTO 관련
-    public static final String NAME_NOT_NULL = "이름은 필수입니다";
     public static final String NAME_NOT_BLANK = "이름이 비어있습니다";
 
     public static final String PRICE_NOT_NULL = "가격은 필수입니다";
@@ -19,7 +18,6 @@ public class Message {
 
     public static final String QUANTITY_OUT_OF_RANGE = "추가 수량은 1보다 커야합니다";
 
-    public static final String LIST_NOT_NULL = "리스트는 필수입니다.";
     public static final String LIST_NOT_EMPTY = "ID 리스트가 비어있습니다";
 
     public static final String ID_NOT_NULL = "ID값은 필수입니다.";

@@ -18,6 +18,11 @@ public class ProductAdminService {
 
     private final ProductRepository productRepository;
 
+    private Product findProductOrThrow(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() ->new NotFoundException(Message.PRODUCT_NOT_EXIST));
+    }
+
     // 새 상품 DB에 등록
     @Transactional
     public ProductDTO addProduct(ProductSaveRequest productSaveRequest) {
@@ -45,8 +50,7 @@ public class ProductAdminService {
     public StockAddResponse addStock(Long id, StockAddRequest stockAddRequest) {
 
         // DB에서 엔티티 찾아오고 유효성 검증
-        Product product = productRepository.findById(id)
-                .orElseThrow(()-> new NotFoundException(Message.PRODUCT_NOT_EXIST));
+        Product product = findProductOrThrow(id);
 
         product.addStock(stockAddRequest.additionalQuantity());
 
@@ -60,8 +64,7 @@ public class ProductAdminService {
         for (Long id : productDeleteRequest.productIds()) {
 
             // 존재하는 상품인지 확인
-            Product product = productRepository.findById(id)
-                    .orElseThrow(() ->new NotFoundException(Message.PRODUCT_NOT_EXIST));
+            Product product = findProductOrThrow(id);
 
             // 존재하면 삭제
             productRepository.delete(product);

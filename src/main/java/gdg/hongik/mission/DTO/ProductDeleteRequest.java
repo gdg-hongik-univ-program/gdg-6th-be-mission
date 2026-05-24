@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Positive;
 import java.util.List;
 
 public record ProductDeleteRequest (
-        @NotNull(message = Message.LIST_NOT_NULL)
         @NotEmpty(message = Message.LIST_NOT_EMPTY)
         List<   @NotNull(message = Message.ID_NOT_NULL)
                 @Positive(message = Message.ID_NOT_NEGATIVE)
