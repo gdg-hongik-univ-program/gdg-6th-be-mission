@@ -4,12 +4,14 @@ import gdg.hongik.mission.DTO.ProductBuyRequest;
 import gdg.hongik.mission.DTO.ProductBuyResponse;
 import gdg.hongik.mission.DTO.ProductFindResponse;
 import gdg.hongik.mission.Service.ProductUserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins="*")
 public class ProductUserController {
 
     private final ProductUserService productUserService;
@@ -18,18 +20,13 @@ public class ProductUserController {
     @GetMapping("/products")
     public ResponseEntity<ProductFindResponse> getProducts(@RequestParam String name) {
 
-        ProductFindResponse productFindResponse
-                = productUserService.findProductByName(name);
-
-        return ResponseEntity.ok(productFindResponse);
+        return ResponseEntity.ok(productUserService.findProductByName(name));
     }
 
     //상품 구매
     @PostMapping("/orders")
-    public ResponseEntity<ProductBuyResponse> buyProducts(@RequestBody ProductBuyRequest productBuyRequest) {
+    public ResponseEntity<ProductBuyResponse> buyProducts(@Valid @RequestBody ProductBuyRequest productBuyRequest) {
 
-        ProductBuyResponse productBuyResponse = productUserService.buyProducts(productBuyRequest);
-
-        return ResponseEntity.ok(productBuyResponse);
+        return ResponseEntity.ok(productUserService.buyProducts(productBuyRequest));
     }
 }

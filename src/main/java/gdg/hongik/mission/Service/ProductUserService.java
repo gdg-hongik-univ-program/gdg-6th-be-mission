@@ -5,7 +5,10 @@ import gdg.hongik.mission.DTO.ProductBuyResponse;
 import gdg.hongik.mission.DTO.ProductFindResponse;
 import gdg.hongik.mission.Entity.Product;
 import gdg.hongik.mission.Repository.ProductRepository;
+import gdg.hongik.mission.common.Exception.NotFoundException;
+import gdg.hongik.mission.common.Message;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +28,7 @@ public class ProductUserService {
 
         // 리포지토리에서 조회하기
         Product product = productRepository.findByName(name)
-                .orElseThrow(()-> new RuntimeException("존재하지 않는 상품입니다"));
+                .orElseThrow(()-> new NotFoundException(Message.PRODUCT_NOT_EXIST));
 
         // 존재하는 상품이면 정보 반환
         return  ProductFindResponse.from(product);
@@ -35,11 +38,6 @@ public class ProductUserService {
     @Transactional
     public ProductBuyResponse buyProducts(ProductBuyRequest productBuyRequest) {
 
-        // 요청이 비어있으면 에러 던지기
-        if(productBuyRequest.orderProducts().isEmpty()) {
-            throw new RuntimeException("주문 요청이 비어있습니다");
-        }
-
         // 응답 정보를 담기 위해 ProductBuyResponse DTO 생성
         List<ProductBuyResponse.OrderedProduct> orderedProductList = new ArrayList<>();
 
@@ -48,13 +46,12 @@ public class ProductUserService {
         // List 하나씩 돌며 수정 로직 호출하기
         for ( ProductBuyRequest.OrderRequest orderRequest : productBuyRequest.orderProducts() ) {
 
-            // 값 꺼내오기
-            long id = orderRequest.id();
+            // 수량 값 꺼내기
             int quantity = orderRequest.quantity();
 
             // 존재하는 상품인지 확인
-            Product product = productRepository.findById(id)
-                    .orElseThrow(()-> new RuntimeException("존재하지 않는 상품입니다."));
+            Product product = productRepository.findById(orderRequest.id())
+                    .orElseThrow(()-> new NotFoundException(Message.PRODUCT_NOT_EXIST));
 
             // 해당 상품 총 구매액과 전체 주문액 계산
             int subTotal = product.getPrice() * quantity;
