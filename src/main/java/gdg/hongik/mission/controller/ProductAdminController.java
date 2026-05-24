@@ -2,6 +2,7 @@ package gdg.hongik.mission.controller;
 import gdg.hongik.mission.dto.*;
 import gdg.hongik.mission.service.ProductAdminService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -25,9 +26,8 @@ public class ProductAdminController {
     // 2. 재고 추가
     @PatchMapping("/admin/products/{productName}")
     public AddStockResponse addStock(
-            @Valid
             @PathVariable String productName,
-            @RequestBody AddStockRequest request
+            @Valid @RequestBody AddStockRequest request
     ) {
 
         return productAdminService.addStock(productName, request);
@@ -35,7 +35,7 @@ public class ProductAdminController {
 
     // 3. 상품 삭제
     @DeleteMapping("/admin/products/{productName}")
-    public DeleteProductsResponse deleteProduct(@Valid @PathVariable String productName) {
+    public DeleteProductsResponse deleteProduct(@PathVariable @NotBlank(message = "삭제할 상품명은 필수입니다.") String productName) {
 
         return productAdminService.deleteProduct(productName);
     }

@@ -2,11 +2,11 @@ package gdg.hongik.mission.service;
 
 import gdg.hongik.mission.dto.*;
 import gdg.hongik.mission.entity.Product;
+import gdg.hongik.mission.exception.DuplicateProductException;
+import gdg.hongik.mission.exception.ProductNotFoundException;
 import gdg.hongik.mission.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,17 +21,12 @@ public class ProductAdminService {
     @Transactional
     public ProductResponse createProduct(ProductCreateRequest request) {
 
-        String productName = (String) request.productName();
-        List<Product> products = productRepository.findAll();
-        // 중복 검사
-        for (Product p : products) {
-            if (p.getProductName().equals(productName)) {
-                throw new RuntimeException("상품이 이미 존재합니다.");
-            }
+        if (productRepository.existsByProductName(request.productName())) {
+            throw new DuplicateProductException(); // 우리가 만든 커스텀 예외
         }
 
         Product product = new Product();
-        product.setProductName(productName);
+        product.setProductName(request.productName());
         product.setProductPrice(request.productPrice());
         product.setRemainQuantity(request.remainQuantity());
 
@@ -47,23 +42,10 @@ public class ProductAdminService {
 
     @Transactional
     public AddStockResponse addStock( String productName, AddStockRequest request ) {
-        System.out.println("==========" + productName);
-        int addQuantity = (int) request.addQuantity();
-        List<Product> products = productRepository.findAll();
-        Product product = null;
+        Product product = productRepository.findByProductName(productName)
+                .orElseThrow(ProductNotFoundException::new);
 
-        for (Product p : products) {
-            if (p.getProductName().equals(productName)) {
-                product = p;
-                break;
-            }
-        }
-
-        if (product == null) {
-            throw new RuntimeException("Product not found");
-        }
-
-        product.setRemainQuantity(product.getRemainQuantity() + addQuantity);
+        product.setRemainQuantity(product.getRemainQuantity() + request.addQuantity());
 
 
         return new AddStockResponse(
@@ -75,9 +57,10 @@ public class ProductAdminService {
     // 3. 상품 삭제
     @Transactional
     public DeleteProductsResponse deleteProduct(String productName) {
-
-        // 1. 요청 값 확인 (가장 먼저 실행)
-        System.out.println("프론트에서 넘어온 삭제할 상품명: " + productName);
+        // 1. 삭제하기 전, 해당 상품이 실제로 존재하는지 existsByProductName로 검사
+        if (!productRepository.existsByProductName(productName)) {
+            throw new ProductNotFoundException();
+        }
 
         // 2. 상품 삭제
         productRepository.deleteByProductName(productName);
@@ -87,7 +70,7 @@ public class ProductAdminService {
 
         List<DeleteProductResponse> result = remainProducts.stream()
                 .map(p -> new DeleteProductResponse(p.getProductName(), p.getRemainQuantity()))
-                .collect(Collectors.toList()); // Java 16 이상이라면 .toList() 로 짧게 쓸 수 있습니다.
+                .toList(); // Java 16 이상이라면 .toList() 로 짧게 쓸 수 있습니다.
 
         return new DeleteProductsResponse(result);
     }
