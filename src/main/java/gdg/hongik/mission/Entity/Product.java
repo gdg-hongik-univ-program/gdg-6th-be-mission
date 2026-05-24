@@ -21,7 +21,7 @@ public class Product {
 
     private int stock;
 
-    private int quantity;
+    //private int quantity;
 
     public Product(String name, int price, int stock) {
         this.name = name;
