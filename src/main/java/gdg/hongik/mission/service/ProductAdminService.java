@@ -13,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import gdg.hongik.mission.exception.ProductNotFoundException;
+import gdg.hongik.mission.exception.DuplicateProductException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -29,7 +32,7 @@ public class ProductAdminService {
                 productRepository.findByName(request.name());
 
         if (existingProduct != null) {
-            throw new RuntimeException("이미 존재하는 상품명");
+            throw new DuplicateProductException();
         }
 
         Product product = new Product(
@@ -51,8 +54,7 @@ public class ProductAdminService {
     ) {
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("상품 없음"));
+                .orElseThrow(ProductNotFoundException::new);
 
         product.addStock(request.quantity());
 

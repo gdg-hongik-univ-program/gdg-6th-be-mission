@@ -7,3 +7,4 @@ public record ProductResponse(
         int stock
 ) {
 }
+

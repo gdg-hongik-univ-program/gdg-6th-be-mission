@@ -10,6 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import gdg.hongik.mission.exception.ProductNotFoundException;
+import gdg.hongik.mission.exception.OutOfStockException;
+import gdg.hongik.mission.exception.DuplicateProductException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -21,7 +25,7 @@ public class ProductUserService {
         Product product = productRepository.findByName(name);
 
         if (product == null) {
-            throw new RuntimeException("상품 없음");
+            throw new ProductNotFoundException();
         }
 
         return toResponse(product);
@@ -43,10 +47,12 @@ public class ProductUserService {
                     .orElseThrow(() -> new RuntimeException("상품 없음"));
 
             if (product.getStock() < order.quantity()) {
-                throw new RuntimeException("재고 부족");
+                throw new OutOfStockException();
             }
 
             product.removeStock(order.quantity());
+
+            System.out.println(product.getStock());
 
             int price = product.getPrice() * order.quantity();
             totalPrice += price;

@@ -48,7 +48,7 @@ Content-Type: application/json
 
 [
   {
-    "id": 6,
+    "id": 1,
     "quantity": 2
   }
 ]

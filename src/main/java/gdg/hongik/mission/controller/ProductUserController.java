@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
+
 @RestController
+@Validated
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RequestMapping("/products")
@@ -23,7 +27,6 @@ public class ProductUserController {
     public ProductResponse getProduct(
             @PathVariable String name
     ) {
-        System.out.println("Get 요청 들어옴");
 
         return productUserService.getProduct(name);
     }
@@ -32,18 +35,16 @@ public class ProductUserController {
     @GetMapping
     public List<ProductResponse> getProducts() {
 
-        System.out.println("Get 요청 들어옴");
-
         return productUserService.getProducts();
     }
 
     // 상품 구매
     @PostMapping("/buy")
     public String buyProduct(
-            @RequestBody List<ProductBuyRequest> orders
+            @RequestBody List<@Valid ProductBuyRequest> orders
     ) {
-        System.out.println("buy 요청 들어옴");
 
         return productUserService.buyProduct(orders);
     }
+
 }
